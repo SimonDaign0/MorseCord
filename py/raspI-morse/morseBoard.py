@@ -3,6 +3,7 @@ from morse import mrsCode
 from time import time, sleep
 from enum import Enum
 from gpiozero import Device
+from webhook import sendDiscordMsg
 
 class State(Enum):
     IDLE = 0
@@ -13,6 +14,9 @@ class MorseBoard:
     DASH_MAX = 0.7
     BUILD_TIME = 0.7
     PUSH_MSG = 2
+    #Put your own webhook
+    WEBHOOK = ""
+    SENDER = "Simon" #Put your own name
 
     def __init__(self):
         self.board = Board()
@@ -25,7 +29,7 @@ class MorseBoard:
         self.isPressed = False
         self.timeStamp = time()
 
-        # Hook up button events
+        # Button event hooks
         self.btn.when_pressed = self.pressed
         self.btn.when_released = self.released
 
@@ -82,6 +86,7 @@ class MorseBoard:
                         print(f"Final message: {finalMsg}")
                         self.board.blink(2)
                         self.msg = []
+                        sendDiscordMsg(self.WEBHOOK, finalMsg, self.SENDER)
                         self.state = State.IDLE
 
                 if not self.isPressed and time() - self.timeStamp > self.BUILD_TIME and self.cBuilder:
