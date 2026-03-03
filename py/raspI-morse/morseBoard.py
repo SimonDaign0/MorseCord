@@ -2,7 +2,6 @@ from board import Board
 from morse import mrsCode
 from time import time, sleep
 from enum import Enum
-from gpiozero import Device
 from webhook import sendDiscordMsg
 
 class State(Enum):
